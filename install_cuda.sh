@@ -97,7 +97,10 @@ MINICONDA_PATH="/home/jeromeku/miniconda"
 # TINFO_FLAGS="-DTINFO_LIBRARY=/home/jeromeku/miniconda/lib/libtinfo.so"
 # XML2_FLAGS="-DXML2_LIBRARY=/home/jeromeku/miniconda/lib/libxml2.so"
 # PKG_CONFIG_PATH=$MINICONDA_PATH/lib/pkgconfig:$PKG_CONFIG_PATH cmake --debug-find -Bbuild -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . $PATH_FLAGS $ZSTD_FLAGS $TINFO_FLAGS $XML2_FLAGS 2>&1 | tee cmake.config.log
-
+# # After configuring manually remote -ltinfo -lxml2 from the following files:
+# ./build/tvm/CMakeFiles/tvm.dir/link.txt 
+# ./build/tvm/CMakeFiles/tvm_allvisible.dir/link.txt 
+# ./build/tvm/CMakeFiles/cpptest.dir/link.txt 
 
 # #echo "Building TileLang with make..."
 export LD_LIBRARY_PATH=$MINICONDA_PATH/lib:$LD_LIBRARY_PATH
