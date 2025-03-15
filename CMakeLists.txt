@@ -9,6 +9,7 @@ project(TILE_LANG C CXX)
 # Set default build type to Release if not provided
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 
+
 # Define a custom macro for globbing files with conditional CONFIGURE_DEPENDS
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
   macro(tilelang_file_glob glob variable)
@@ -100,6 +101,28 @@ else()
   message(STATUS "Building TVM from source at ${TVM_SOURCE_DIR}")
   add_subdirectory(${TVM_SOURCE_DIR} tvm EXCLUDE_FROM_ALL)
 endif()
+
+find_library(TINFO_LIBRARY NAMES tinfo HINTS /home/jeromeku/miniconda/lib NO_DEFAULT_PATH)
+
+if(TINFO_LIBRARY)
+  message(STATUS "Found tinfo: ${TINFO_LIBRARY}")
+  target_link_libraries(tvm PRIVATE ${TINFO_LIBRARY})
+  target_link_libraries(tvm_runtime PRIVATE ${TINFO_LIBRARY})
+else()
+  message(FATAL_ERROR "tinfo not found")
+endif()
+
+find_library(XML2_LIBRARY NAMES xml2 HINTS /home/jeromeku/miniconda/lib NO_DEFAULT_PATH)
+if(XML2_LIBRARY)
+    message(STATUS "Found libxml2: ${XML2_LIBRARY}")
+    target_link_libraries(tvm PRIVATE ${XML2_LIBRARY})
+    target_link_libraries(tvm_runtime PRIVATE ${XML2_LIBRARY})
+else()
+    message(FATAL_ERROR "Could not find libxml2")
+endif()
+
+set(CMAKE_EXE_LINKER_FLAGS "-L/home/jeromeku/miniconda/lib ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Linker flags" FORCE)
+
 
 # Collect source files
 tilelang_file_glob(GLOB TILE_LANG_SRCS
